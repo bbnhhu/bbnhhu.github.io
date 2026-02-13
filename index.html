@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phong Bao Từ Tương Lai 2030</title>
+    <style>
+        :root {
+            --primary: #c0392b; /* Màu đỏ phong bao */
+            --gold: #f1c40f;    /* Màu vàng kim */
+            --bg: #fdfbf7;
+            --text: #2c3e50;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 { text-align: center; color: var(--primary); }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        button:hover { background-color: #a93226; }
+        
+        /* Phần Phong Bao Kết Quả */
+        #result-area {
+            display: none;
+            margin-top: 30px;
+            border: 2px solid var(--primary);
+            padding: 30px;
+            background-color: #fff5f5;
+            position: relative;
+        }
+        #result-area::before {
+            content: "📩 2030";
+            position: absolute;
+            top: -15px;
+            left: 20px;
+            background: var(--primary);
+            color: var(--gold);
+            padding: 5px 15px;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .envelope-content h3 { color: var(--primary); border-bottom: 1px solid #ddd; padding-bottom: 10px;}
+        .highlight { color: #d35400; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>📮 Thông Điệp Cho Tôi Năm 2030 </h1>
+    
+    <div class="container" id="input-form">
+        <p>Hãy trung thực với chính mình ở hiện tại (2026). Bản thể tương lai đang lắng nghe.</p>
+        
+        <div class="form-group">
+            <label>Tuổi hiện tại & Ngành nghề/Lĩnh vực</label>
+            <input type="text" id="info" placeholder="VD: 20 tuổi, Hệ thống thông tin quản lý...">
+        </div>
+        
+        <div class="form-group">
+            <label>3 Mục tiêu quan trọng nhất năm 2026</label>
+            <textarea id="goals" rows="3" placeholder="- Học bổng...&#10;- Lãnh đạo CLB...&#10;- Đạt IELTS 7.5..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Nỗi sợ lớn nhất lúc này</label>
+            <input type="text" id="fear" placeholder="VD: Sợ thất bại, sợ bị bỏ lại phía sau...">
+        </div>
+
+        <div class="form-group">
+            <label>Điểm mạnh & Điểm yếu</label>
+            <textarea id="swot" rows="3" placeholder="Mạnh: Tư duy logic... / Yếu: Kỹ năng giao tiếp..."></textarea>
+        </div>
+
+        <button onclick="generateEnvelope()">✉️ Gửi tín hiệu đến 2030</button>
+    </div>
+
+    <div id="result-area">
+        <div class="envelope-content" id="message-content">
+            </div>
+        <button onclick="resetForm()" style="margin-top: 20px; background-color: #7f8c8d;">Làm lại</button>
+    </div>
+
+    <script>
+        function generateEnvelope() {
+            // Lấy dữ liệu
+            const info = document.getElementById('info').value;
+            const goals = document.getElementById('goals').value;
+            const fear = document.getElementById('fear').value;
+            const swot = document.getElementById('swot').value;
+
+            if(!info || !goals) {
+                alert("Vui lòng điền ít nhất thông tin cơ bản và mục tiêu!");
+                return;
+            }
+
+            // Xử lý nội dung giả lập (Trong thực tế, bạn sẽ gửi cái này đến AI API)
+            // Đây là template logic đơn giản để demo
+            const message = `
+                <h2>Chào "tôi" của năm 2026,</h2>
+                <p>Tôi viết những dòng này từ năm 2030, khi chúng ta đã đi qua chặng đường mà bạn đang lo lắng. Đọc kỹ nhé, đây là những gì bạn cần biết để tối ưu hóa 4 năm tới:</p>
+                
+                <h3>1. Lời khuyên KHẨN CẤP (Làm ngay đi!)</h3>
+                <p>Dựa trên mục tiêu của bạn là <em>"${goals}"</em>, hãy ngừng suy nghĩ quá nhiều. Hành động không hoàn hảo tốt hơn sự trì hoãn hoàn hảo. Bắt đầu dự án đó ngay tuần này.</p>
+                
+                <h3>2. Cảnh báo đỏ ⚠️</h3>
+                <p>Nếu bạn vẫn giữ thói quen liên quan đến điểm yếu <em>"${swot}"</em>, bạn sẽ đánh mất cơ hội lớn vào năm 2028. Hãy khắc phục nó trước khi quá muộn.</p>
+                
+                <h3>3. Cơ hội bạn sắp bỏ lỡ</h3>
+                <p>Đừng để nỗi sợ <em>"${fear}"</em> làm mờ mắt. Có một cánh cửa hẹp sắp mở ra trong lĩnh vực <em>${info}</em>, hãy dấn thân vào những việc khó nhất.</p>
+                
+                <h3>4. Kỹ năng cốt lõi (Core Skill)</h3>
+                <p>Trong 2 năm tới, hãy sống chết luyện tập kỹ năng: <strong>Quản trị sự thay đổi và Dữ liệu</strong>. Đây sẽ là vũ khí mạnh nhất của chúng ta.</p>
+                
+                <h3>✨ Câu thần chú cho năm 2026</h3>
+                <p class="highlight">"Kỷ luật là cầu nối giữa mục tiêu và thành tựu. Hãy lì lợm hơn nỗi sợ của bạn."</p>
+                
+                <p style="text-align: right; margin-top: 30px;"><em>— Thân mến, Bạn của năm 2030.</em></p>
+            `;
+
+            // Hiển thị kết quả
+            document.getElementById('input-form').style.display = 'none';
+            document.getElementById('result-area').style.display = 'block';
+            document.getElementById('message-content').innerHTML = message;
+        }
+
+        function resetForm() {
+            document.getElementById('input-form').style.display = 'block';
+            document.getElementById('result-area').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
