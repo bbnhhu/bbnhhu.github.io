@@ -3,159 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phong Bao Từ Tương Lai 2030</title>
+    <title>Gửi Tôi 2026 - Bản Thể Tương Lai</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,400&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #c0392b; /* Màu đỏ phong bao */
-            --gold: #f1c40f;    /* Màu vàng kim */
-            --bg: #fdfbf7;
-            --text: #2c3e50;
+            --bg-color: #f4f1ea;
+            --card-bg: #ffffff;
+            --primary: #b71c1c; /* Đỏ đậm phương Đông */
+            --accent: #d4af37;  /* Vàng kim */
+            --text: #333333;
+            --text-light: #666666;
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg);
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
             color: var(--text);
-            line-height: 1.6;
+            margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .main-wrapper {
+            width: 100%;
             max-width: 800px;
-            margin: 0 auto;
         }
-        h1 { text-align: center; color: var(--primary); }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+        /* CARD GIAO DIỆN */
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid var(--primary);
         }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
+
+        h1 {
+            font-family: 'Merriweather', serif;
+            color: var(--primary);
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 40px;
+            font-size: 0.9em;
+        }
+
+        .form-group { margin-bottom: 25px; }
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
         input, textarea {
             width: 100%;
-            padding: 10px;
+            padding: 15px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 6px;
             font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            background: #fafafa;
         }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(183, 28, 28, 0.1);
+            outline: none;
+        }
+
         button {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 18px;
-            cursor: pointer;
+            padding: 18px;
             width: 100%;
-            border-radius: 5px;
+            font-size: 16px;
             font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: background 0.3s;
+            margin-top: 10px;
         }
-        button:hover { background-color: #a93226; }
-        
-        /* Phần Phong Bao Kết Quả */
-        #result-area {
+
+        button:hover { background-color: #8e0000; }
+
+        /* LOADING EFFECT */
+        #loading-overlay {
             display: none;
-            margin-top: 30px;
-            border: 2px solid var(--primary);
-            padding: 30px;
-            background-color: #fff5f5;
+            text-align: center;
+            margin: 30px 0;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* PHẦN LÁ THƯ (RESULT) */
+        #letter-container {
+            display: none;
+            animation: fadeIn 1s;
+        }
+        
+        .paper {
+            background-color: #fffef0;
+            padding: 50px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            font-family: 'Merriweather', serif;
+            line-height: 1.8;
+            color: #2c3e50;
             position: relative;
         }
-        #result-area::before {
-            content: "📩 2030";
+
+        .paper::before {
+            content: '';
             position: absolute;
-            top: -15px;
-            left: 20px;
-            background: var(--primary);
-            color: var(--gold);
-            padding: 5px 15px;
-            font-weight: bold;
-            border-radius: 5px;
+            top: 0; left: 20px;
+            width: 100%; height: 100%;
+            border-left: 2px solid rgba(255, 0, 0, 0.1);
+            pointer-events: none;
         }
-        .envelope-content h3 { color: var(--primary); border-bottom: 1px solid #ddd; padding-bottom: 10px;}
+
+        .paper h2 { font-size: 1.5em; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-top: 0; }
+        .paper h3 { 
+            font-size: 1.1em; 
+            color: var(--primary); 
+            margin-top: 30px; 
+            text-transform: uppercase; 
+            font-weight: bold; 
+            background: rgba(183, 28, 28, 0.05);
+            padding: 10px;
+            border-left: 4px solid var(--primary);
+        }
         .highlight { color: #d35400; font-weight: bold; }
+        .signature { margin-top: 50px; text-align: right; font-style: italic; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .card { padding: 20px; }
+            .paper { padding: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <h1>📮 Thông Điệp Cho Tôi Năm 2030 </h1>
-    
-    <div class="container" id="input-form">
-        <p>Hãy trung thực với chính mình ở hiện tại (2026). Bản thể tương lai đang lắng nghe.</p>
-        
-        <div class="form-group">
-            <label>Tuổi hiện tại & Ngành nghề/Lĩnh vực</label>
-            <input type="text" id="info" placeholder="VD: 20 tuổi, Hệ thống thông tin quản lý...">
-        </div>
-        
-        <div class="form-group">
-            <label>3 Mục tiêu quan trọng nhất năm 2026</label>
-            <textarea id="goals" rows="3" placeholder="- Học bổng...&#10;- Lãnh đạo CLB...&#10;- Đạt IELTS 7.5..."></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>Nỗi sợ lớn nhất lúc này</label>
-            <input type="text" id="fear" placeholder="VD: Sợ thất bại, sợ bị bỏ lại phía sau...">
-        </div>
-
-        <div class="form-group">
-            <label>Điểm mạnh & Điểm yếu</label>
-            <textarea id="swot" rows="3" placeholder="Mạnh: Tư duy logic... / Yếu: Kỹ năng giao tiếp..."></textarea>
-        </div>
-
-        <button onclick="generateEnvelope()">✉️ Gửi tín hiệu đến 2030</button>
-    </div>
-
-    <div id="result-area">
-        <div class="envelope-content" id="message-content">
+    <div class="main-wrapper">
+        <div class="card" id="input-card">
+            <h1>⏳ Trạm Thời Gian 2030</h1>
+            <p class="subtitle">"Nhập dữ liệu hiện tại để giải mã tương lai"</p>
+            
+            <div class="form-group">
+                <label>1. Ngành học / Đam mê của bạn là gì?</label>
+                <input type="text" id="career" placeholder="VD: Marketing, IT, Thiết kế, Kinh doanh, Y dược...">
             </div>
-        <button onclick="resetForm()" style="margin-top: 20px; background-color: #7f8c8d;">Làm lại</button>
+            
+            <div class="form-group">
+                <label>2. Nỗi sợ ám ảnh bạn nhất lúc này?</label>
+                <input type="text" id="fear" placeholder="VD: Sợ thất bại, sợ vô dụng, sợ peer pressure, sợ AI...">
+            </div>
+
+            <div class="form-group">
+                <label>3. Điểm yếu lớn nhất bạn muốn giấu?</label>
+                <input type="text" id="weakness" placeholder="VD: Lười biếng, tiếng Anh kém, hay trì hoãn, giao tiếp tệ...">
+            </div>
+
+            <div class="form-group">
+                <label>4. Tên thân mật của bạn (Để gọi trong thư)</label>
+                <input type="text" id="name" placeholder="VD: Cô bé, Mr.T, Bro, hay tên thật...">
+            </div>
+
+            <button onclick="processTimeMachine()">🚀 KHỞI ĐỘNG CỖ MÁY (Gửi đi)</button>
+        </div>
+
+        <div id="loading-overlay">
+            <div class="spinner"></div>
+            <p id="loading-text">Đang phân tích dòng thời gian...</p>
+        </div>
+
+        <div id="letter-container">
+            <div class="paper">
+                <div id="letter-content"></div>
+                <button onclick="location.reload()" style="margin-top: 30px; background: #555;">Gửi lại tín hiệu khác</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        function generateEnvelope() {
-            // Lấy dữ liệu
-            const info = document.getElementById('info').value;
-            const goals = document.getElementById('goals').value;
-            const fear = document.getElementById('fear').value;
-            const swot = document.getElementById('swot').value;
+        // --- 🧠 PHẦN "AI BRAIN" (DATABASE) ---
+        
+        const KNOWLEDGE_BASE = {
+            // Ngành nghề và Cơ hội/Lời khuyên tương ứng
+            careers: {
+                "marketing|truyền thông|content|social": {
+                    advice: "Năm 2030, Content không còn là vua, 'Context' (Ngữ cảnh) mới là vua. Đừng chỉ học viết, hãy học cách điều khiển AI để tạo ra 1000 bài viết nhưng vẫn giữ được cái hồn của bạn.",
+                    opportunity: "Sắp tới sẽ có một làn sóng 'Human-Touch Marketing' (Tiếp thị cảm xúc). Khi AI làm mọi thứ quá hoàn hảo, sự 'không hoàn hảo' của con người lại trở thành hàng hiếm đắt giá. Hãy nuôi dưỡng sự thấu cảm."
+                },
+                "it|lập trình|dev|code|công nghệ|kỹ thuật": {
+                    advice: "Đừng tự hào vì biết nhiều ngôn ngữ lập trình. Năm 2030, chúng tôi code bằng giọng nói. Giá trị của bạn nằm ở tư duy kiến trúc hệ thống và khả năng giải quyết vấn đề (Problem Solving) mà máy móc bó tay.",
+                    opportunity: "Đừng bỏ qua các dự án mã nguồn mở (Open Source) hoặc các cuộc thi Hackathon nhỏ. Đó là nơi bạn gặp những Co-founder tương lai của mình, chứ không phải trên giảng đường."
+                },
+                "thiết kế|design|đồ họa|kiến trúc|nghệ thuật": {
+                    advice: "Gu thẩm mỹ của bạn là tài sản duy nhất không bị trượt giá. Nhưng hãy nhớ: Thiết kế không phải là vẽ cho đẹp, mà là giải quyết nỗi đau của khách hàng bằng thị giác.",
+                    opportunity: "Cơ hội lớn sẽ đến khi bạn kết hợp Nghệ thuật với Dữ liệu (Data). Hãy thử học một chút về UI/UX hoặc Tâm lý học hành vi. Đó là mỏ vàng chưa ai khai thác."
+                },
+                "kinh doanh|kinh tế|tài chính|sale|quản trị": {
+                    advice: "Mối quan hệ (Network) năm 2026 chính là Tài sản ròng (Net Worth) của năm 2030. Đừng ăn trưa một mình nữa. Hãy tập kỹ năng 'Small Talk' và biến người lạ thành đối tác.",
+                    opportunity: "Sẽ có những mô hình kinh doanh siêu nhỏ (Micro-business) bùng nổ. Đừng đợi vốn lớn. Hãy tập bán một thứ gì đó ngay ngày mai, dù chỉ là một file tài liệu hay một chiếc áo cũ."
+                },
+                "y|dược|bác sĩ|sức khỏe": {
+                    advice: "Công nghệ sẽ thay đổi cách khám bệnh, nhưng không thay được cái nắm tay an ủi bệnh nhân. Hãy rèn luyện y đức và sự kiên nhẫn, đó là tấm khiên bảo vệ sự nghiệp của bạn.",
+                    opportunity: "Xu hướng 'Personalized Medicine' (Y học cá nhân hóa) và chăm sóc sức khỏe tâm thần (Mental Health) sẽ lên ngôi. Hãy để mắt đến những ngách này."
+                },
+                "default": { // Cho các ngành khác
+                    advice: "Bất kể bạn làm nghề gì, hãy nhớ quy tắc '10.000 giờ' đã lỗi thời. Bây giờ là quy tắc 'Thích nghi nhanh'. Ai học lại từ đầu nhanh hơn, người đó thắng.",
+                    opportunity: "Cơ hội thường ngụy trang dưới lớp áo 'Việc khó' hoặc 'Làm miễn phí'. Đừng chê việc nhỏ. Những chi tiết nhỏ tạo nên sự xuất sắc lớn."
+                }
+            },
 
-            if(!info || !goals) {
-                alert("Vui lòng điền ít nhất thông tin cơ bản và mục tiêu!");
+            // Nỗi sợ và Lời an ủi/Chiến lược
+            fears: {
+                "thất bại|sai|ngã|fail": "Bạn sợ thất bại? Tin tôi đi, năm 2028 tôi đã phạm một sai lầm lớn gấp 10 lần bây giờ, nhưng nhờ nó mà tôi mới trưởng thành. Thất bại chỉ là dữ liệu để ta tối ưu hóa lần sau thôi.",
+                "bỏ lại|thua kém|peer pressure|áp lực|bạn bè": "Tắt mạng xã hội đi. Bạn đang so sánh hậu trường (Behind-the-scenes) đầy rác của mình với trailer phim hào nhoáng của người khác. Múi giờ của bạn là duy nhất. Bạn không trễ, bạn đang đi đúng giờ.",
+                "ai|robot|thất nghiệp|thay thế": "AI không thay thế con người. Chỉ có người biết dùng AI mới thay thế người không biết. Nỗi sợ này là tín hiệu tốt, nó nhắc bạn phải nâng cấp bản thân ngay lập tức.",
+                "nghèo|tiền|nợ": "Cảm giác túng thiếu bây giờ là động lực tốt nhất. Hãy ghi nhớ cảm giác này, đóng khung nó lại. Nó sẽ là ngọn lửa đốt cháy sự lười biếng mỗi sáng bạn thức dậy.",
+                "cô đơn|một mình|ế": "Hành trình lên đỉnh cao thường vắng vẻ. Thời gian này là lúc tốt nhất để bạn xây dựng nội lực. Khi bạn rực rỡ, ong bướm tự tìm đến.",
+                "default": "Nỗi sợ chỉ là một con hổ giấy. Nó to lớn trong đầu bạn, nhưng tí hon khi bạn bắt tay vào hành động. Hãy thử làm điều bạn sợ nhất trong 5 phút xem, chẳng có gì xảy ra cả đâu."
+            },
+
+            // Điểm yếu và Cảnh báo nghiêm khắc
+            weaknesses: {
+                "lười|trì hoãn|nhác": "CẢNH BÁO ĐỎ: Nếu bạn còn tiếp tục 'để mai tính', năm 2030 chúng ta sẽ là kẻ vô danh. Sự trì hoãn là kẻ cắp thời gian và là liều thuốc độc ngọt ngào nhất. Kỷ luật hoặc là chết chìm.",
+                "tiếng anh|ngoại ngữ": "Năm 2030, thế giới phẳng lì rồi. Không có ngoại ngữ giống như bạn bị bịt mắt và bịt tai vậy. Đừng ngụy biện nữa, mỗi ngày 15 từ vựng, bắt đầu ngay tối nay.",
+                "giao tiếp|nhát|tự tin|hướng nội": "Bạn có tài năng, nhưng nếu không ai biết thì cũng bằng không. Hãy tập nói trước gương. Hãy tập chào người lạ. Sự tự tin là kỹ năng luyện tập được, không phải bẩm sinh.",
+                "cảm xúc|nóng tính|overthinking|nghĩ nhiều": "Cái đầu lạnh và trái tim nóng - đừng làm ngược lại. Suy nghĩ quá nhiều chỉ giết chết cơ hội. Hãy học thiền hoặc viết nhật ký (Journaling) để xả 'rác' trong đầu ra.",
+                "default": "Điểm yếu này đang là tảng đá buộc chân bạn lại. Bạn không cần sửa nó hoàn toàn, nhưng hãy kiểm soát nó. Đừng để nó cầm lái cuộc đời bạn."
+            },
+
+            // Câu chốt (Motto) ngẫu nhiên
+            mottos: [
+                "Cách tốt nhất để dự đoán tương lai là tự mình kiến tạo nó.",
+                "Muốn có những gì chưa từng có, phải làm những gì chưa từng làm.",
+                "Kỷ luật là cầu nối giữa mục tiêu và thành tựu.",
+                "Đừng cúi đầu, vương miện sẽ rơi. Đừng khóc, kẻ xấu sẽ cười.",
+                "Áp lực tạo nên kim cương. Bạn đang trong quá trình mài giũa đấy.",
+                "Ngày hôm nay là ngày già nhất của bạn trong quá khứ, và là ngày trẻ nhất của bạn trong tương lai. Hãy sống trọn vẹn."
+            ]
+        };
+
+        // --- HÀM XỬ LÝ LOGIC ---
+
+        function findBestMatch(text, category) {
+            text = text.toLowerCase();
+            const data = KNOWLEDGE_BASE[category];
+            
+            // Quét qua các từ khóa trong database
+            for (let key in data) {
+                if (key === 'default') continue;
+                // Tách key thành mảng các từ khóa (cách nhau bởi dấu |)
+                const keywords = key.split('|');
+                // Nếu text chứa bất kỳ từ khóa nào
+                if (keywords.some(k => text.includes(k))) {
+                    return data[key]; // Trả về kết quả tương ứng
+                }
+            }
+            return data['default']; // Không tìm thấy thì trả về default
+        }
+
+        function processTimeMachine() {
+            // 1. Lấy dữ liệu
+            const name = document.getElementById('name').value || "Người bạn trẻ";
+            const career = document.getElementById('career').value;
+            const fear = document.getElementById('fear').value;
+            const weakness = document.getElementById('weakness').value;
+
+            // Validate sơ sơ
+            if (!career || !fear) {
+                alert("Vui lòng nạp đủ nhiên liệu (điền thông tin) để cỗ máy hoạt động!");
                 return;
             }
 
-            // Xử lý nội dung giả lập (Trong thực tế, bạn sẽ gửi cái này đến AI API)
-            // Đây là template logic đơn giản để demo
-            const message = `
-                <h2>Chào "tôi" của năm 2026,</h2>
-                <p>Tôi viết những dòng này từ năm 2030, khi chúng ta đã đi qua chặng đường mà bạn đang lo lắng. Đọc kỹ nhé, đây là những gì bạn cần biết để tối ưu hóa 4 năm tới:</p>
-                
-                <h3>1. Lời khuyên KHẨN CẤP (Làm ngay đi!)</h3>
-                <p>Dựa trên mục tiêu của bạn là <em>"${goals}"</em>, hãy ngừng suy nghĩ quá nhiều. Hành động không hoàn hảo tốt hơn sự trì hoãn hoàn hảo. Bắt đầu dự án đó ngay tuần này.</p>
-                
-                <h3>2. Cảnh báo đỏ ⚠️</h3>
-                <p>Nếu bạn vẫn giữ thói quen liên quan đến điểm yếu <em>"${swot}"</em>, bạn sẽ đánh mất cơ hội lớn vào năm 2028. Hãy khắc phục nó trước khi quá muộn.</p>
-                
-                <h3>3. Cơ hội bạn sắp bỏ lỡ</h3>
-                <p>Đừng để nỗi sợ <em>"${fear}"</em> làm mờ mắt. Có một cánh cửa hẹp sắp mở ra trong lĩnh vực <em>${info}</em>, hãy dấn thân vào những việc khó nhất.</p>
-                
-                <h3>4. Kỹ năng cốt lõi (Core Skill)</h3>
-                <p>Trong 2 năm tới, hãy sống chết luyện tập kỹ năng: <strong>Quản trị sự thay đổi và Dữ liệu</strong>. Đây sẽ là vũ khí mạnh nhất của chúng ta.</p>
-                
-                <h3>✨ Câu thần chú cho năm 2026</h3>
-                <p class="highlight">"Kỷ luật là cầu nối giữa mục tiêu và thành tựu. Hãy lì lợm hơn nỗi sợ của bạn."</p>
-                
-                <p style="text-align: right; margin-top: 30px;"><em>— Thân mến, Bạn của năm 2030.</em></p>
-            `;
+            // 2. Hiệu ứng Loading
+            document.getElementById('input-card').style.display = 'none';
+            document.getElementById('loading-overlay').style.display = 'block';
 
-            // Hiển thị kết quả
-            document.getElementById('input-form').style.display = 'none';
-            document.getElementById('result-area').style.display = 'block';
-            document.getElementById('message-content').innerHTML = message;
+            // Thay đổi text loading cho nguy hiểm
+            const loadingTexts = [
+                "Đang kết nối vệ tinh 2030...",
+                "Đang phân tích dữ liệu sinh trắc học...",
+                "Đang tải ký ức...",
+                "Đã tìm thấy dòng thời gian của bạn!"
+            ];
+            let step = 0;
+            const interval = setInterval(() => {
+                document.getElementById('loading-text').innerText = loadingTexts[step % loadingTexts.length];
+                step++;
+            }, 800);
+
+            // 3. Xử lý sau 3 giây
+            setTimeout(() => {
+                clearInterval(interval);
+                generateLetter(name, career, fear, weakness);
+            }, 3000);
         }
 
-        function resetForm() {
-            document.getElementById('input-form').style.display = 'block';
-            document.getElementById('result-area').style.display = 'none';
+        function generateLetter(name, career, fear, weakness) {
+            // Lấy nội dung từ "AI Brain"
+            const careerData = findBestMatch(career, 'careers');
+            const fearMsg = findBestMatch(fear, 'fears');
+            const weaknessMsg = findBestMatch(weakness, 'weaknesses');
+            const randomMotto = KNOWLEDGE_BASE.mottos[Math.floor(Math.random() * KNOWLEDGE_BASE.mottos.length)];
+
+            // Ngày tháng hiện tại
+            const today = new Date();
+            const dateStr = `Ngày ${today.getDate()} tháng ${today.getMonth() + 1}, năm 2030`;
+
+            // Nội dung thư
+            const html = `
+                <h2>Gửi ${name},</h2>
+                <p style="text-align: right; color: #7f8c8d; font-size: 0.9em;"><em>${dateStr}</em></p>
+                
+                <p>Chào bạn, tôi viết bức thư này khi đang ngồi tại bàn làm việc của mình vào năm 2030. Tôi vừa tình cờ tìm lại được những dòng ghi chú cũ của bạn vào năm 2026. Cảm giác thật lạ khi nhìn lại chính mình ngây ngô ngày ấy.</p>
+
+                <h3>1. Về con đường ${career} bạn chọn</h3>
+                <p>${careerData.advice}</p>
+
+                <h3>2. Về nỗi sợ "${fear}" đang ám ảnh bạn</h3>
+                <p>${fearMsg}</p>
+
+                <h3>3. Lời cảnh báo (Nghiêm túc đấy!)</h3>
+                <p>${weaknessMsg} Hãy khắc phục nó ngay hôm nay, đừng để đến lúc cơ hội gõ cửa thì bạn lại không đủ sức mở cửa.</p>
+
+                <h3>4. Cơ hội vàng bạn sắp gặp phải</h3>
+                <p>${careerData.opportunity}</p>
+
+                <div style="margin-top: 40px; padding: 20px; background: #fff3e0; border-left: 5px solid #ff9800; border-radius: 4px;">
+                    <strong>✨ Thông điệp cốt lõi cho năm 2026:</strong><br>
+                    "${randomMotto}"
+                </div>
+
+                <div class="signature">
+                    Thân mến,<br>
+                    <strong>Phiên bản trưởng thành của bạn.</strong>
+                </div>
+            `;
+
+            document.getElementById('loading-overlay').style.display = 'none';
+            document.getElementById('letter-container').style.display = 'block';
+            document.getElementById('letter-content').innerHTML = html;
         }
     </script>
 </body>
